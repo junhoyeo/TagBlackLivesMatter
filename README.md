@@ -20,6 +20,13 @@ python3 tagBlackLivesMatter.py
 
 ![result](./result.png)
 
+## 👋 Cleanup
+To remove tags, just run the script again with the `remove` argument.
+
+```bash
+python3 tagBlackLivesMatter.py remove
+```
+
 ## 📖 Learn More
 
 - [Black Lives Matter: Home](https://blacklivesmatter.com/)

@@ -1,6 +1,14 @@
+import sys
 import getpass
 from github import Github, PaginatedList, Repository
 
+def get_is_removal():
+  try:
+    return sys.argv[1] == 'remove'
+  except:
+    return False
+
+is_removal = get_is_removal()
 username = input('👋 Input your GitHub username: ')
 password = getpass.getpass('🔐 Input your GitHub password: ')
 tag = '#BlackLivesMatter'
@@ -31,6 +39,19 @@ for repo in all_repos:
   print(if_none_to_string(repo.description, 'None'))
 
   description_with_tag = if_none_to_string(repo.description).strip()
+
+  if is_removal:
+    if description_with_tag.endswith(tag):
+      description_without_tag = description_with_tag.replace(tag, '')
+      try:
+        repo.edit(description=description_without_tag)
+        print(f'➡️ {description_without_tag}')
+        print('❗️ Removed tag')
+        repo_count += 1
+      except:
+        print('❌ Error occurred while removing tag from description')
+      continue
+
   if tag in description_with_tag:
     print('👍 Already tagged. Passing')
   else:
@@ -46,4 +67,8 @@ for repo in all_repos:
       print('❌ Error occurred while editing project description')
 
 print_separator()
-print(f'✅ Finished adding tag #BlackLivesMatter to {repo_count} repos')
+
+if is_removal:
+  print(f'✅ Finished removing tag #BlackLivesMatter from {repo_count} repos')
+else:
+  print(f'✅ Finished adding tag #BlackLivesMatter to {repo_count} repos')
